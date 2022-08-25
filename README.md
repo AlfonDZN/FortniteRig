@@ -29,6 +29,16 @@ More parts will be added soon!
 
 If things are still not clear, click [here]() to view a video on how to use the addon
 
+## Subpanels
+#### Bone layers
+* This subpanel lets you control which part of the rig to view and what parts not
+
+#### Switches
+* This subpanel gives you control to switch between ik and fk rigs
+
+#### Finish
+* This subpanel has a button which is used to finish the foot rig after the bone positioning has been done
+
 ### Author
 [Twitter](https://twitter.com/AlfonDZN)
 
