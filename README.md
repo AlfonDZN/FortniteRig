@@ -27,7 +27,7 @@ More parts will be added soon!
     * Note that you do not need to worry about both sides, since x-mirror will be turned on!
 * Once the feet bones are positioned, press the 'Finish foot rig' button in the 'Finish' subpanel
 
-If things are still not clear, click [here]() to view a video on how to use the addon
+If things are still not clear, click [here](https://www.youtube.com/watch?v=tJYqJK4PlXo&t) to view a video on how to use the addon
 
 ## Subpanels
 #### Bone layers
