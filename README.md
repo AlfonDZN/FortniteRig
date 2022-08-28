@@ -5,6 +5,7 @@ A tool created to expedite the rigging process of a Fortnite character in Blende
 -   Arms
 -   Legs
 -   Feet
+-   Eyes
 
 More parts will be added soon!
 
