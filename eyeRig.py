@@ -18,13 +18,14 @@ nameList = [
 
 boneList = ["R_eye", "L_eye"]
 
+widgetList = ['eyes', 'eye']
+
 def selectBone(boneName):
     for bone in bpy.context.active_object.data.edit_bones[:]:
         if bone.name == boneName:
             bone.select = True
             bone.select_head = True
             bone.select_tail = True
-
 
 def renameBones():
     for name, newName in nameList:
@@ -106,6 +107,17 @@ class eyeRig(Operator):
         obj.select_set(True)
 
         renameObjects()
+
+        #Create new collection for the widgets
+        collection = bpy.context.blend_data.collections.new(name = 'widgets')
+        bpy.context.collection.children.link(collection)
+        #Put the widgets in a collection
+        for widget in widgetList:
+            bpy.context.scene.collection.objects.unlink(bpy.data.objects[widget])
+            bpy.data.collections['widgets'].objects.link(bpy.data.objects[widget])
+
+        #Exclude widget collection
+        bpy.context.view_layer.layer_collection.children['widgets'].exclude = True
 
         #Go into edit mode
         bpy.ops.object.mode_set(mode = 'EDIT')
