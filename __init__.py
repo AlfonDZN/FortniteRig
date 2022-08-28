@@ -8,21 +8,22 @@ from . armRig import advancedArmRig
 from . legRig import advancedLegRig
 from . addFeetBones import addFeetBones
 from . finishFeetRig import finishFeetRig
+from . eyeRig import eyeRig
 from . visibleLayers import baseRigVisible, fkArmVisible, ikArmVisible, ikLegVisible, fkLegVisible, feetVisible
 
 bl_info = {
-    "name" : "Advanced Fortnite Rig",
+    "name" : "Fortnite Rig",
     "author" : "Alfon",
     "description" : "",
     "blender" : (3, 2, 2),
-    "version" : (0, 0, 1),
+    "version" : (1, 0, 0),
     "location" : "View3D",
     "warning" : "",
     "category" : "Rig"
 }
 
 classes = (Rig_PT_Panel, Rig_PT_Subpanel_hide, Rig_PT_Subpanel_switches, Rig_PT_Subpanel_finish,
-           rig, advancedArmRig, advancedLegRig, addFeetBones, finishFeetRig,
+           rig, advancedArmRig, advancedLegRig, addFeetBones, finishFeetRig, eyeRig,
            MySettings, baseRigVisible, ikArmVisible, fkArmVisible, ikLegVisible, fkLegVisible, feetVisible)
 
 def register():

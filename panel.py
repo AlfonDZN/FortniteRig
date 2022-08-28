@@ -108,7 +108,7 @@ class MySettings(PropertyGroup):
     )
 
 class Rig_PT_Panel(Panel):
-    bl_label = "Advanced Fortnite Rig"
+    bl_label = "Fortnite Rig"
     bl_idname = "RIG_PT_Panel"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
@@ -122,7 +122,7 @@ class Rig_PT_Panel(Panel):
         row.prop(mytool, "sArmature")
 
         row = layout.row()
-        row.operator('object.rig', text="Add advanced rig", icon = "CON_KINEMATIC")
+        row.operator('object.rig', text="Add rig", icon = "CON_KINEMATIC")
 
         row = layout.row()
         row.label(text = "Select which rigs to add")
@@ -137,13 +137,11 @@ class Rig_PT_Panel(Panel):
         row.prop(mytool, "bFeet")
         row.enabled = mytool.bLegs
 
-        """row = layout.row()
-        row.prop(mytool, "bEyes")
-        row.enabled = False
-
         row = layout.row()
-        row.prop(mytool, "bFingers")
-        row.enabled = False"""
+        row.prop(mytool, "bEyes")
+
+        #row = layout.row()
+        #row.prop(mytool, "bFingers")
 
 class Rig_PT_Subpanel_hide(Panel):
     bl_parent_id = "RIG_PT_Panel"
