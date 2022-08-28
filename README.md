@@ -19,7 +19,7 @@ More parts will be added soon!
 ## Usage
 
 * Next to name, add the name of the armature
-* Choose which parts to add (Arms, Legs, Feet)
+* Choose which parts to add (Arms, Legs, Feet, Eyes)
 * Click on 'Add advanced rig'
 * If you choose to add a rig for the feet, you need to do a bit of bone positioning
     * 'ctrl_pivot_toe' should be positioned at the front of the toes
