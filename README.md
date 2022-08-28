@@ -5,11 +5,12 @@ A tool created to expedite the rigging process of a Fortnite character in Blende
 -   Arms
 -   Legs
 -   Feet
+-   Eyes
 
 More parts will be added soon!
 
 ## Download
-[Release](https://github.com/AlfonDZN/FortniteRig) 1.0.0
+[Version 1.0.0](https://github.com/AlfonDZN/FortniteRig)
 
 ## Install
 
