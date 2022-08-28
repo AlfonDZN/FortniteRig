@@ -83,11 +83,6 @@ class eyeRig(Operator):
         #Go into object mode to select the armature
         bpy.ops.object.mode_set(mode = 'OBJECT')
 
-        #Make only the first layer visible
-        for i in range(32):
-            bpy.context.object.data.layers[0] = True
-            bpy.context.object.data.layers[i] = False
-
         newMesh = bpy.data.meshes.new('newMesh')
         newMesh.from_pydata(vertices, edges, faces)
         newMesh.update()
@@ -100,24 +95,37 @@ class eyeRig(Operator):
         #Add ctrl shapes for the individual eyes
         bpy.ops.mesh.primitive_circle_add()
 
-        #Position the ctrl objects
+        renameObjects()
+
+        #Check if 'widgets' collection already exists
+        for col in bpy.data.collections:
+            if col.name == 'widgets':
+                collectionFound = True
+            else:
+                collectionFound = False
+
+        #Create new collection for the widgets
+        if not collectionFound:
+            collection = bpy.context.blend_data.collections.new(name = 'widgets')
+            bpy.context.collection.children.link(collection)
+        #Put the widgets in a collection
+        for widget in widgetList:
+            bpy.context.collection.objects.unlink(bpy.data.objects[widget])
+            bpy.data.collections['widgets'].objects.link(bpy.data.objects[widget])
+
+        #Exclude widget collection
+        bpy.context.layer_collection.children['widgets'].exclude = True
+
+        #Select the armature
         obj = bpy.context.scene.objects[armature]
         bpy.ops.object.select_all(action='DESELECT')
         bpy.context.view_layer.objects.active = obj
         obj.select_set(True)
 
-        renameObjects()
-
-        #Create new collection for the widgets
-        collection = bpy.context.blend_data.collections.new(name = 'widgets')
-        bpy.context.collection.children.link(collection)
-        #Put the widgets in a collection
-        for widget in widgetList:
-            bpy.context.scene.collection.objects.unlink(bpy.data.objects[widget])
-            bpy.data.collections['widgets'].objects.link(bpy.data.objects[widget])
-
-        #Exclude widget collection
-        bpy.context.view_layer.layer_collection.children['widgets'].exclude = True
+        #Make only the first layer visible
+        for i in range(32):
+            bpy.context.object.data.layers[0] = True
+            bpy.context.object.data.layers[i] = False
 
         #Go into edit mode
         bpy.ops.object.mode_set(mode = 'EDIT')
