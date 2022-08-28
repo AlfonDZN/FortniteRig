@@ -7,7 +7,7 @@ A tool created to expedite the rigging process of a Fortnite character in Blende
 -   Feet
 -   Eyes
 
-Upcoming update: widgets!
+Next update: widgets!
 
 ## Download
 [Version 1.1.2](https://github.com/AlfonDZN/FortniteRig)
