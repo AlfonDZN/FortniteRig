@@ -17,7 +17,7 @@ bl_info = {
     "author" : "Alfon",
     "description" : "",
     "blender" : (3, 2, 2),
-    "version" : (1, 1, 2),
+    "version" : (1, 2, 0),
     "location" : "View3D",
     "warning" : "",
     "category" : "Rig"

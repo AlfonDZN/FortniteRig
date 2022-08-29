@@ -10,7 +10,7 @@ A tool created to expedite the rigging process of a Fortnite character in Blende
 Next update: widgets!
 
 ## Download
-[Version 1.1.2](https://github.com/AlfonDZN/FortniteRig)
+[Version 1.2.0](https://github.com/AlfonDZN/FortniteRig)
 
 ## Install
 
