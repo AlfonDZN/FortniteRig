@@ -1,7 +1,11 @@
 import bpy
+
+from math import pi
 from mathutils import *
 
 from bpy.types import Operator
+
+suffix = ['_r', '_l']
 
 targetList = ["thigh_r", "thigh_l", "calf_r", "calf_l", "foot_r", "foot_l", "ball_r", "ball_l"]
 
@@ -136,8 +140,9 @@ class advancedLegRig(Operator):
         #Variable of the armature to add the rig to
         armature = bpy.context.scene.my_tool.sArmature
 
-        #Variable for edit bones
+        #Variable for the bones
         editBone = bpy.data.objects[armature].data.edit_bones
+        poseBone = bpy.data.objects[armature].pose.bones
 
         #Go into object mode to select the armature
         bpy.ops.object.mode_set(mode = 'OBJECT')
@@ -273,8 +278,11 @@ class advancedLegRig(Operator):
                 var.targets[0].id = bpy.context.scene
                 var.targets[0].data_path = 'my_tool.fSwitchLegsLeft'
 
-        #Go back into object mode
-        bpy.ops.object.mode_set(mode = 'OBJECT')
+        #Go into edit mode
+        bpy.ops.object.mode_set(mode = 'EDIT')
+
+        recalculateBoneRoll("ctrl_ik_leg_r", "GLOBAL_POS_X")
+        recalculateBoneRoll("ctrl_ik_leg_l", "GLOBAL_POS_X")
 
         #Change bone layers in pose mode
         bpy.ops.object.mode_set(mode = 'POSE')
@@ -293,5 +301,38 @@ class advancedLegRig(Operator):
         for bone in poleList:
             bpy.context.object.data.bones[bone].layers[9] = True
             bpy.context.object.data.bones[bone].layers[0] = False
+
+        #Add widgets
+        if bpy.context.scene.my_tool.bWidgets:
+            for suf in suffix:
+                poseBone['ctrl_ik_pole_leg' + suf].custom_shape = bpy.data.objects['poleTarget']
+                poseBone['ctrl_ik_pole_leg' + suf].custom_shape_scale_xyz = (0.5, 0.5, 0.5)
+
+                poseBone['ctrl_ik_leg' + suf].custom_shape = bpy.data.objects['ik_leg']
+                poseBone['ctrl_ik_leg' + suf].custom_shape_scale_xyz = (1, 1.25, 1)
+                poseBone['ctrl_ik_leg' + suf].custom_shape_translation = (0.02, -0.01, 0.01)
+                poseBone['ctrl_ik_leg' + suf].custom_shape_rotation_euler[1] = -pi/2
+
+                poseBone['ctrl_ball' + suf].custom_shape = bpy.data.objects['ctrl_toe']
+                poseBone['ctrl_ball' + suf].custom_shape_scale_xyz = (1.5, 1.5, 1.5)
+                poseBone['ctrl_ball' + suf].custom_shape_translation = (-0.03, 0, 0.006)
+                poseBone['ctrl_ball' + suf].custom_shape_rotation_euler = (0, pi/2, -pi/2)
+
+                poseBone['ctrl_fk_thigh' + suf].custom_shape = bpy.data.objects['fk']
+                poseBone['ctrl_fk_thigh' + suf].custom_shape_scale_xyz = (0.25, 0.25, 0.25)
+                poseBone['ctrl_fk_thigh' + suf].custom_shape_rotation_euler[0] = pi/2
+
+                poseBone['ctrl_fk_calf' + suf].custom_shape = bpy.data.objects['fk']
+                poseBone['ctrl_fk_calf' + suf].custom_shape_scale_xyz = (0.25, 0.25, 0.25)
+                poseBone['ctrl_fk_calf' + suf].custom_shape_rotation_euler[0] = pi/2
+                
+                poseBone['ctrl_fk_foot' + suf].custom_shape = bpy.data.objects['fk']
+                poseBone['ctrl_fk_foot' + suf].custom_shape_scale_xyz = (0.5, 0.5, 0.5)
+                poseBone['ctrl_fk_foot' + suf].custom_shape_rotation_euler[0] = pi/2
+
+                poseBone['ctrl_fk_ball' + suf].custom_shape = bpy.data.objects['ctrl_toe']
+                poseBone['ctrl_fk_ball' + suf].custom_shape_scale_xyz = (1.5, 1.5, 1.5)
+                poseBone['ctrl_fk_ball' + suf].custom_shape_translation = (-0.03, 0, 0.006)
+                poseBone['ctrl_fk_ball' + suf].custom_shape_rotation_euler = (0, pi/2, -pi/2)
 
         return {'FINISHED'}

@@ -9,6 +9,12 @@ class MySettings(PropertyGroup):
             description = "Enter the name of the armature"
         )
 
+    bWidgets : BoolProperty(
+        name = "Widgets",
+        description = "Use widgets for the bones",
+        default = True
+    )
+
     bArms : BoolProperty(
             name = "Arms",
             description = "Add a rig for the arms",
@@ -123,6 +129,7 @@ class Rig_PT_Panel(Panel):
 
         row = layout.row()
         row.operator('object.rig', text="Add rig", icon = "CON_KINEMATIC")
+        row.prop(mytool, "bWidgets", icon = "BONE_DATA")
 
         row = layout.row()
         row.label(text = "Select which rigs to add")
@@ -139,9 +146,6 @@ class Rig_PT_Panel(Panel):
 
         row = layout.row()
         row.prop(mytool, "bEyes")
-
-        #row = layout.row()
-        #row.prop(mytool, "bFingers")
 
 class Rig_PT_Subpanel_hide(Panel):
     bl_parent_id = "RIG_PT_Panel"

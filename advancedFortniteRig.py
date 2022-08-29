@@ -14,6 +14,8 @@ class rig(Operator):
 
     def execute(self, context):
         
+        if bpy.context.scene.my_tool.bWidgets:
+            bpy.ops.object.widgets() 
         if bpy.context.scene.my_tool.bArms:
             bpy.ops.object.arm_rig()
         if bpy.context.scene.my_tool.bLegs:
@@ -21,6 +23,6 @@ class rig(Operator):
         if bpy.context.scene.my_tool.bEyes:
             bpy.ops.object.eye_rig()            
         if bpy.context.scene.my_tool.bFeet:
-            bpy.ops.object.feet_bones()    
+            bpy.ops.object.feet_bones()  
 
         return {'FINISHED'}

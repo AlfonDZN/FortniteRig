@@ -1,7 +1,11 @@
 import bpy
+
+from math import pi
 from mathutils import *
 
 from bpy.types import Operator
+
+suffix = ['_r', '_l']
 
 targetList = ["hand_r", "hand_l", "lowerarm_r", "lowerarm_l", "upperarm_r", "upperarm_l"]
 
@@ -85,6 +89,9 @@ class advancedArmRig(Operator):
         #Variable of the armature to add the rig to
         armature = bpy.context.scene.my_tool.sArmature
 
+        #Variable for the bones
+        poseBone = bpy.data.objects[armature].pose.bones
+
         #Go into object mode to select the armature
         bpy.ops.object.mode_set(mode = 'OBJECT')
 
@@ -143,25 +150,25 @@ class advancedArmRig(Operator):
         bpy.ops.object.mode_set(mode = 'POSE')
 
         for dummy, bone in nameList[:2]:
-            armIK = bpy.data.objects[armature].pose.bones[bone].constraints.new('IK')
+            armIK = poseBone[bone].constraints.new('IK')
 
             #Set IK parameters
             armIK.target = bpy.data.objects[armature]
             armIK.pole_target = bpy.data.objects[armature]
             if bone == "mch_hand_r":
-                armIK.subtarget = bpy.data.objects[armature].pose.bones["ctrl_ik_hand_r"].name
-                armIK.pole_subtarget = bpy.data.objects[armature].pose.bones["ctrl_ik_pole_arm_r"].name
+                armIK.subtarget = poseBone["ctrl_ik_hand_r"].name
+                armIK.pole_subtarget = poseBone["ctrl_ik_pole_arm_r"].name
                 armIK.pole_angle = calculatePoleAngle("clavicle_r", "ctrl_ik_hand_r", "ctrl_ik_pole_arm_r")
             if bone == "mch_hand_l":
-                armIK.subtarget = bpy.data.objects[armature].pose.bones["ctrl_ik_hand_l"].name
-                armIK.pole_subtarget = bpy.data.objects[armature].pose.bones["ctrl_ik_pole_arm_l"].name
+                armIK.subtarget = poseBone["ctrl_ik_hand_l"].name
+                armIK.pole_subtarget = poseBone["ctrl_ik_pole_arm_l"].name
                 armIK.pole_angle = calculatePoleAngle("clavicle_l", "ctrl_ik_hand_l", "ctrl_ik_pole_arm_l")
             armIK.chain_count = 3
             armIK.use_rotation = True
 
         #Add copy transform contraints for the ik switch
         for bone in targetList:
-            armCopyTransforms = bpy.data.objects[armature].pose.bones[bone].constraints.new('COPY_TRANSFORMS')
+            armCopyTransforms = poseBone[bone].constraints.new('COPY_TRANSFORMS')
             armCopyTransforms.name = "ikCopyTransforms"
 
             #Set copy transform parameters
@@ -170,7 +177,7 @@ class advancedArmRig(Operator):
 
         #Add copy transform constraints for the fk switch
         for bone in targetList:
-            armCopyTransforms = bpy.data.objects[armature].pose.bones[bone].constraints.new('COPY_TRANSFORMS')
+            armCopyTransforms = poseBone[bone].constraints.new('COPY_TRANSFORMS')
             armCopyTransforms.name = "fkCopyTransforms"
 
             #Set copy transform parameters
@@ -179,7 +186,7 @@ class advancedArmRig(Operator):
 
         #Add drivers for the ik/fk switch
         for bone in targetList:
-            constraint = bpy.data.objects[armature].pose.bones[bone].constraints["fkCopyTransforms"]
+            constraint = poseBone[bone].constraints["fkCopyTransforms"]
             if "_r" in bone:
                 driverInfluence = constraint.driver_add('influence')
                 driverInfluence.driver.type = 'AVERAGE'
@@ -219,5 +226,33 @@ class advancedArmRig(Operator):
 
         #Go back into object mode
         bpy.ops.object.mode_set(mode = 'OBJECT')
+
+        #Add widgets
+        if bpy.context.scene.my_tool.bWidgets:
+            for suf in suffix:
+                poseBone['ctrl_ik_hand' + suf].custom_shape = bpy.data.objects['ik_hand']
+                poseBone['ctrl_ik_hand' + suf].custom_shape_scale_xyz = (1.75, 1.75, 1.75)
+                poseBone['ctrl_ik_hand' + suf].custom_shape_translation[0] = -0.01 
+
+                poseBone['ctrl_ik_pole_arm' + suf].custom_shape = bpy.data.objects['poleTarget']
+                poseBone['ctrl_ik_pole_arm' + suf].custom_shape_scale_xyz = (0.5, 0.5, 0.5)
+
+                poseBone['ctrl_fk_upperarm' + suf].custom_shape = bpy.data.objects['fk']
+                poseBone['ctrl_fk_upperarm' + suf].custom_shape_scale_xyz = (0.75, 0.75, 0.75)
+                poseBone['ctrl_fk_upperarm' + suf].custom_shape_translation[1] = 0.035
+                if suf == '_r':
+                    poseBone['ctrl_fk_upperarm' + suf].custom_shape_translation[2] = 0.02
+                    poseBone['ctrl_fk_upperarm' + suf].custom_shape_rotation_euler[0] = (21*pi)/180
+                elif suf == '_l':
+                    poseBone['ctrl_fk_upperarm' + suf].custom_shape_translation[2] = -0.02
+                    poseBone['ctrl_fk_upperarm' + suf].custom_shape_rotation_euler[0] = (-21*pi)/180
+
+                poseBone['ctrl_fk_lowerarm' + suf].custom_shape = bpy.data.objects['fk']
+                poseBone['ctrl_fk_lowerarm' + suf].custom_shape_scale_xyz = (0.4, 0.4, 0.4)
+                poseBone['ctrl_fk_lowerarm' + suf].custom_shape_rotation_euler[0] = pi/2
+
+                poseBone['ctrl_fk_hand' + suf].custom_shape = bpy.data.objects['fk']
+                poseBone['ctrl_fk_hand' + suf].custom_shape_scale_xyz = (1.5, 1.5, 1.5)
+                poseBone['ctrl_fk_hand' + suf].custom_shape_rotation_euler[0] = pi/2
 
         return {'FINISHED'}

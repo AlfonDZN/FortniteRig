@@ -2,7 +2,7 @@ import bpy
 
 from bpy.types import Operator
 from mathutils import Matrix
-from math import radians
+from math import radians, pi
 
 nameList = [
     ("mch_foot_r.001", "mch_heel_rot_r"),
@@ -111,6 +111,7 @@ class finishFeetRig(Operator):
 
         #Variable for edit bones
         editBone = bpy.data.objects[armature].data.edit_bones
+        poseBone = bpy.data.objects[armature].pose.bones
 
         #Go into object mode to select the armature
         bpy.ops.object.mode_set(mode = 'OBJECT')
@@ -254,5 +255,24 @@ class finishFeetRig(Operator):
 
         #Go back into object mode
         bpy.ops.object.mode_set(mode = 'OBJECT')
+
+        #Add widgets
+        if bpy.context.scene.my_tool.bWidgets:
+            for suf in suffix:
+                poseBone['ctrl_ik_leg' + suf].custom_shape = None
+
+                poseBone['ctrl_ik_foot' + suf].custom_shape = bpy.data.objects['ik_leg']
+                poseBone['ctrl_ik_foot' + suf].custom_shape_scale_xyz = (1, 1.25, 1)
+                poseBone['ctrl_ik_foot' + suf].custom_shape_translation = (0.065, 0.075, 0.0075)
+                poseBone['ctrl_ik_foot' + suf].custom_shape_rotation_euler = (0, -pi/2, -pi/2)
+
+                poseBone['ctrl_pivot_toe' + suf].custom_shape = bpy.data.objects['foot_pivot']
+                poseBone['ctrl_pivot_toe' + suf].custom_shape_scale_xyz = (0.25, 0.25, 0.25) 
+                poseBone['ctrl_pivot_toe' + suf].custom_shape_translation = (-0.024, 0.06, 0)
+                poseBone['ctrl_pivot_toe' + suf].custom_shape_rotation_euler = (0, pi, 0)
+                
+                poseBone['ctrl_heel' + suf].custom_shape = bpy.data.objects['foot_pivot']
+                poseBone['ctrl_heel' + suf].custom_shape_scale_xyz = (0.25, 0.25, 0.25) 
+                poseBone['ctrl_heel' + suf].custom_shape_translation = (0.024, 0.06, 0)
 
         return {'FINISHED'}
