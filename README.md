@@ -7,10 +7,10 @@ A tool created to expedite the rigging process of a Fortnite character in Blende
 -   Feet
 -   Eyes
 
-More parts will be added soon!
+Next update: widgets!
 
 ## Download
-[Version 1.0.0](https://github.com/AlfonDZN/FortniteRig)
+[Version 1.1.2](https://github.com/AlfonDZN/FortniteRig)
 
 ## Install
 
@@ -19,7 +19,7 @@ More parts will be added soon!
 ## Usage
 
 * Next to name, add the name of the armature
-* Choose which parts to add (Arms, Legs, Feet)
+* Choose which parts to add (Arms, Legs, Feet, Eyes)
 * Click on 'Add advanced rig'
 * If you choose to add a rig for the feet, you need to do a bit of bone positioning
     * 'ctrl_pivot_toe' should be positioned at the front of the toes
@@ -28,7 +28,7 @@ More parts will be added soon!
     * Note that you do not need to worry about both sides, since x-mirror will be turned on!
 * Once the feet bones are positioned, press the 'Finish foot rig' button in the 'Finish' subpanel
 
-If things are still not clear, click [here](https://www.youtube.com/watch?v=tJYqJK4PlXo&t) to view a video on how to use the addon
+If things are still not clear, click [here](https://www.youtube.com/watch?v=tJYqJK4PlXo&t) to watch a video on how to use the addon
 
 ## Subpanels
 #### Bone layers
