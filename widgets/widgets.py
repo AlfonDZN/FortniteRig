@@ -2,9 +2,11 @@ import bpy
 import os
 import json
 
+from math import pi
+
 from bpy.types import Operator
 
-widgetList = ['ik_hand', 'poleTarget', 'fk', 'ik_leg', 'ctrl_toe', 'foot_pivot']
+widgetList = ['ik_hand', 'poleTarget', 'fk', 'ik_leg', 'ctrl_toe', 'foot_pivot', 'fingers', 'eyes', 'eye', 'root', 'pelvis']
 
 class useWidgets(Operator):
     bl_idname = "object.widgets"
@@ -13,6 +15,13 @@ class useWidgets(Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
+        #Variable of the armature to add the rig to
+        armature = bpy.context.scene.my_tool.sArmature
+
+        #Variable for the bones
+        editBone = bpy.data.objects[armature].data.edit_bones
+        poseBone = bpy.data.objects[armature].pose.bones
+
         #Go into object mode to select the armature
         bpy.ops.object.mode_set(mode = 'OBJECT')
 
@@ -62,5 +71,23 @@ class useWidgets(Operator):
 
         #Exclude widget collection
         bpy.context.layer_collection.children['widgets'].exclude = True
+
+        #Check if the pelvis and/or root already have a custom bone shape
+        if not poseBone['root'].custom_shape or not poseBone['pelvis'].custom_shape:
+            #Add widget for pevis and the root
+            poseBone['root'].custom_shape = bpy.data.objects['root']
+            poseBone['root'].custom_shape_scale_xyz = (1.5, 1.5, 1.5)
+            poseBone['root'].custom_shape_rotation_euler = (pi/2, 0, 0)
+
+            poseBone['pelvis'].custom_shape = bpy.data.objects['pelvis']
+            poseBone['pelvis'].custom_shape_scale_xyz = (2, 2, 2)
+
+            bpy.ops.object.mode_set(mode = 'EDIT')
+            if round(abs(editBone['pelvis'].head[0]), 1) == round(abs(editBone['pelvis'].tail[0]), 1):
+                poseBone['pelvis'].custom_shape_rotation_euler = (pi/2, 0, 0)
+            elif round(abs(editBone['pelvis'].head[1]), 1) == round(abs(editBone['pelvis'].tail[1]), 1):
+                poseBone['pelvis'].custom_shape_rotation_euler = (0, pi/2, 0)
+
+            bpy.ops.object.mode_set(mode = 'OBJECT')
 
         return {'FINISHED'}

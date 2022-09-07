@@ -3,10 +3,6 @@ import bpy
 from math import pi
 from bpy.types import Operator
 
-vertices = [(-1.8,0,0), (-1.78079,-0.19509,0), (-1.72388,-0.382683,0), (-1.63147,-0.55557,0), (-1.50711,-0.707107,0), (-1.35557,-0.83147,0), (-1.18268,-0.92388,0), (-0.995091,-0.980785,0), (-0.800001,-1,0), (-0.60491,-0.980785,0), (-0.417317,-0.92388,0), (-0.24443,-0.83147,0), (0.24443,-0.83147,0), (0.417317,-0.92388,0), (0.60491,-0.980785,0), (0.800001,-1,0), (0.995091,-0.980785,0), (1.18268,-0.92388,0), (1.35557,-0.83147,0), (1.50711,-0.707107,0), (1.63147,-0.55557,0), (1.72388,-0.382684,0), (1.78079,-0.19509,0), (1.8,0,0), (1.78079,0.19509,0), (1.72388,0.382684,0), (1.63147,0.55557,0), (1.50711,0.707107,0), (1.35557,0.83147,0), (1.18268,0.92388,0), (0.995091,0.980785,0), (0.800001,1,0), (0.60491,0.980785,0), (0.417317,0.92388,0), (0.24443,0.83147,0), (-0.24443,0.83147,0), (-0.417317,0.92388,0), (-0.60491,0.980785,0), (-0.800001,1,0), (-0.995091,0.980785,0), (-1.18268,0.92388,0), (-1.35557,0.83147,0), (-1.50711,0.707107,0), (-1.63147,0.55557,0), (-1.72388,0.382683,0), (-1.78079,0.19509,0)]
-edges = [(0,1), (1,2), (2,3), (3,4), (4,5), (5,6), (6,7), (7,8), (8,9), (9,10), (10,11), (11,12), (12,13), (13,14), (14,15), (15,16), (16,17), (17,18), (18,19), (19,20), (20,21), (21,22), (22,23), (23,24), (24,25), (25,26), (26,27), (27,28), (28,29), (29,30), (30,31), (31,32), (32,33), (33,34), (34,35), (35,36), (36,37), (37,38), (38,39), (39,40), (40,41), (41,42), (42,43), (43,44), (44,45), (45,0)]
-faces = []
-
 nameList = [
     ("Circle", "eye"),
     ("R_eye.001", "ctrl_eyes"),
@@ -15,8 +11,6 @@ nameList = [
 ]
 
 boneList = ["R_eye", "L_eye"]
-
-widgetList = ['eyes', 'eye']
 
 def selectBone(boneName):
     for bone in bpy.context.active_object.data.edit_bones[:]:
@@ -34,16 +28,6 @@ def renameBones():
             continue
         #Rename
         poseBone.name = newName
-
-def renameObjects():
-    for name, newName in nameList:
-        #Get the object with name
-        object = bpy.context.scene.objects.get(name)
-        #Continue if no object of that name
-        if object is None:
-            continue
-        #Rename
-        object.name = newName
 
 def newEditBone(boneName, parent):
     armature = bpy.context.scene.my_tool.sArmature
@@ -80,39 +64,6 @@ class eyeRig(Operator):
 
         #Go into object mode to select the armature
         bpy.ops.object.mode_set(mode = 'OBJECT')
-
-        newMesh = bpy.data.meshes.new('newMesh')
-        newMesh.from_pydata(vertices, edges, faces)
-        newMesh.update()
-        
-        #Make object from the mesh
-        newObject = bpy.data.objects.new('eyes', newMesh)
-        viewLayer = bpy.context.view_layer
-        viewLayer.active_layer_collection.collection.objects.link(newObject)
-
-        #Add ctrl shapes for the individual eyes
-        bpy.ops.mesh.primitive_circle_add()
-
-        renameObjects()
-
-        #Check if 'widgets' collection already exists
-        for col in bpy.data.collections:
-            if col.name == 'widgets':
-                collectionFound = True
-            else:
-                collectionFound = False
-
-        #Create new collection for the widgets
-        if not collectionFound:
-            collection = bpy.context.blend_data.collections.new(name = 'widgets')
-            bpy.context.collection.children.link(collection)
-        #Put the widgets in a collection
-        for widget in widgetList:
-            bpy.context.collection.objects.unlink(bpy.data.objects[widget])
-            bpy.data.collections['widgets'].objects.link(bpy.data.objects[widget])
-
-        #Exclude widget collection
-        bpy.context.layer_collection.children['widgets'].exclude = True
 
         #Select the armature
         obj = bpy.context.scene.objects[armature]

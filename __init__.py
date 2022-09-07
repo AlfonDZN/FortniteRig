@@ -2,7 +2,7 @@ import bpy
 
 from bpy.utils import register_class, unregister_class
 
-from . panel import Rig_PT_Panel, Rig_PT_Subpanel_hide, Rig_PT_Subpanel_switches, Rig_PT_Subpanel_finish, MySettings
+from . panel import Rig_PT_Panel, Rig_PT_Subpanel_finish, MySettings
 from . advancedFortniteRig import rig
 from . widgets.widgets import useWidgets
 from . armRig import advancedArmRig
@@ -10,7 +10,7 @@ from . legRig import advancedLegRig
 from . addFeetBones import addFeetBones
 from . finishFeetRig import finishFeetRig
 from . eyeRig import eyeRig
-from . visibleLayers import baseRigVisible, fkArmVisible, ikArmVisible, ikLegVisible, fkLegVisible, feetVisible
+from . fingerRig import advancedFingerRig
 
 bl_info = {
     "name" : "Fortnite Rig",
@@ -23,9 +23,8 @@ bl_info = {
     "category" : "Rig"
 }
 
-classes = (Rig_PT_Panel, Rig_PT_Subpanel_hide, Rig_PT_Subpanel_switches, Rig_PT_Subpanel_finish, useWidgets,
-           rig, advancedArmRig, advancedLegRig, addFeetBones, finishFeetRig, eyeRig,
-           MySettings, baseRigVisible, ikArmVisible, fkArmVisible, ikLegVisible, fkLegVisible, feetVisible)
+classes = (Rig_PT_Panel, Rig_PT_Subpanel_finish, useWidgets, rig, advancedArmRig, advancedLegRig, addFeetBones, finishFeetRig,
+           eyeRig, advancedFingerRig, MySettings)
 
 def register():
     for cls in classes:

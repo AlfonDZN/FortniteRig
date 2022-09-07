@@ -5,229 +5,252 @@ from bpy.props import StringProperty, BoolProperty, FloatProperty
 
 class MySettings(PropertyGroup):
     sArmature : StringProperty(
-            name = "Name",
-            description = "Enter the name of the armature"
+            name = 'Name',
+            description = 'Enter the name of the armature'
         )
 
     bWidgets : BoolProperty(
-        name = "Widgets",
-        description = "Use widgets for the bones",
+        name = 'Widgets',
+        description = 'Use widgets for the bones',
         default = True
     )
 
     bArms : BoolProperty(
-            name = "Arms",
-            description = "Add a rig for the arms",
+            name = 'Arms',
+            description = 'Add a rig for the arms',
             default = False
         )
 
     bLegs : BoolProperty(
-        name = "Legs",
-        description = "Add a rig for the legs",
+        name = 'Legs',
+        description = 'Add a rig for the legs',
         default = False
     )
 
     bFeet : BoolProperty(
-        name = "Feet",
-        description = "Add a rig for the feet",
+        name = 'Feet',
+        description = 'Add a rig for the feet',
         default = False
     )
 
     bEyes : BoolProperty(
-        name = "Eyes",
-        description = "Add a rig for the eyes",
+        name = 'Eyes',
+        description = 'Add a rig for the eyes',
         default = False
     )
 
     bFingers : BoolProperty(
-        name = "Fingers",
-        description = "Add a rig for the fingers",
+        name = 'Fingers',
+        description = 'Add a rig for the fingers',
         default = False
     )
 
     fSwitchArmsRight : FloatProperty(
-        name = "Arm right",
-        description = "An ik/fk switch for the right arm",
+        name = 'Arm right',
+        description = 'An ik/fk switch for the right arm',
         default = 0,
         min = 0,
         max = 1
     )
 
     fSwitchArmsLeft : FloatProperty(
-        name = "Arm Left",
-        description = "An ik/fk switch for the left arm",
+        name = 'Arm Left',
+        description = 'An ik/fk switch for the left arm',
         default = 0,
         min = 0,
         max = 1
     )
 
     fSwitchLegsLeft : FloatProperty(
-        name = "Leg left",
-        description = "An ik/fk switch for the left leg",
+        name = 'Leg left',
+        description = 'An ik/fk switch for the left leg',
         default = 0,
         min = 0,
         max = 1
     )
 
     fSwitchLegsRight : FloatProperty(
-        name = "Leg right",
-        description = "An ik/fk switch for the right leg",
+        name = 'Leg right',
+        description = 'An ik/fk switch for the right leg',
         default = 0,
         min = 0,
         max = 1
     )
 
     bVisibleBaseRig : BoolProperty(
-        name = "Base rig",
-        description = "Make the base rig (in)visible",
+        name = 'Base rig',
+        description = 'Make the base rig (in)visible',
         default = True
     )
 
     bVisibleIKArms : BoolProperty(
-        name = "IK arms",
-        description = "Make the IK arm bones (in)visible",
-        default = True
+        name = 'IK arms',
+        description = 'Make the IK arm bones (in)visible',
+        default = False
     )
 
     bVisibleFKArms : BoolProperty(
-        name = "FK arms",
-        description = "Make the FK arm bones (in)visible",
-        default = True
+        name = 'FK arms',
+        description = 'Make the FK arm bones (in)visible',
+        default = False
+    )
+
+    bVisibleFingers : BoolProperty(
+        name = 'Fingers',
+        description = 'Make the finger bones (in)visible',
+        default = False
     )
 
     bVisibleIKLegs : BoolProperty(
-        name = "IK Legs",
-        description = "Make the IK leg bones (in)visible",
-        default = True
+        name = 'IK Legs',
+        description = 'Make the IK leg bones (in)visible',
+        default = False
     )
 
     bVisibleFKLegs : BoolProperty(
-        name = "FK Legs",
-        description = "Make the FK leg bones (in)visible",
-        default = True
+        name = 'FK Legs',
+        description = 'Make the FK leg bones (in)visible',
+        default = False
     )
 
-    bPinned : BoolProperty(
-        name = "Pin",
-        description = "Pin the panel",
+    bVisibleFeet : BoolProperty(
+        name = 'Feet',
+        description = 'Make the feet bones (in)visible',
         default = False
     )
 
 class Rig_PT_Panel(Panel):
-    bl_label = "Fortnite Rig"
-    bl_idname = "RIG_PT_Panel"
-    bl_space_type = "VIEW_3D"
-    bl_region_type = "UI"
-    bl_category = "Rig"
+    bl_label = 'Fortnite Rig'
+    bl_idname = 'RIG_PT_Panel'
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'Rig'
 
     def draw(self, context):
         layout = self.layout
         mytool = context.scene.my_tool
 
-        row = layout.row()
-        row.prop(mytool, "sArmature")
+        ##################################
+        ##             Rigs            ###
+        ##################################
+        box = layout.box()
+        box.prop(mytool, 'sArmature')
+ 
+        row = box.row()
+        row.operator('object.rig', text='Add rig', icon = 'CON_KINEMATIC')
+        row.prop(mytool, 'bWidgets', icon = 'BONE_DATA')
 
-        row = layout.row()
-        row.operator('object.rig', text="Add rig", icon = "CON_KINEMATIC")
-        row.prop(mytool, "bWidgets", icon = "BONE_DATA")
+        sub = box.column(align = True)
+        sub.label(text = 'Select which rigs to add')
 
-        row = layout.row()
-        row.label(text = "Select which rigs to add")
+        sub.prop(mytool, 'bEyes')
 
-        row = layout.row()
-        row.prop(mytool, "bArms")
+        sub.prop(mytool, 'bArms')
 
-        row = layout.row()
-        row.prop(mytool, "bLegs")
+        sub.prop(mytool, 'bFingers')
 
-        row = layout.row()
-        row.prop(mytool, "bFeet")
-        row.enabled = mytool.bLegs
+        sub.prop(mytool, 'bLegs')
+        
+        sub.prop(mytool, 'bFeet')
+        #row.enabled = mytool.bLegs
 
-        row = layout.row()
-        row.prop(mytool, "bEyes")
 
-class Rig_PT_Subpanel_hide(Panel):
-    bl_parent_id = "RIG_PT_Panel"
-    bl_label = "Bone layers"
-    bl_idname = "RIG_PT_Subpanel_hide"
-    bl_space_type = "VIEW_3D"
-    bl_region_type = "UI"
-    bl_category = "Rig"
-    bl_options = {"DEFAULT_CLOSED"}
 
-    def draw(self, context):
-        layout = self.layout
-            
-        if bpy.context.object.data.layers[0]:
-            layout.operator('object.base_rig_hide', text = "Base rig", icon = "HIDE_OFF")
-        else:
-            layout.operator('object.base_rig_hide', text = "Base rig", icon = "HIDE_ON")
+
+        ##################################
+        ##            Layers           ###
+        ##################################
+        box = layout.box()
+        row = box.row()
+        row.label(text = 'Bone layers')
+
+        row = box.row()
+        if bpy.context.scene.my_tool.bVisibleBaseRig:
+            row.prop(mytool, 'bVisibleBaseRig', text = 'Base rig', icon = 'HIDE_OFF')
+            bpy.context.object.data.layers[0] = True
+        
+        if not bpy.context.scene.my_tool.bVisibleBaseRig:
+            row.prop(mytool, 'bVisibleBaseRig', text = 'Base rig', icon = 'HIDE_ON')
+            bpy.context.object.data.layers[0] = False
 
         if bpy.context.scene.my_tool.bArms:
-            row = layout.row()
-            if bpy.context.object.data.layers[8]:
-                row.operator('object.ik_arm_hide', text = "IK arm", icon = "HIDE_OFF")
-            else:
-                row.operator('object.ik_arm_hide', text = "IK arm", icon = "HIDE_ON")
+            row = box.row()
+            if bpy.context.scene.my_tool.bVisibleIKArms:
+                row.prop(mytool, 'bVisibleIKArms', text = 'IK arm', icon = 'HIDE_OFF')
+                bpy.context.object.data.layers[8] = True
+            if not bpy.context.scene.my_tool.bVisibleIKArms:
+                row.prop(mytool, 'bVisibleIKArms', text = 'IK arm', icon = 'HIDE_ON')
+                bpy.context.object.data.layers[8] = False
 
-            if bpy.context.object.data.layers[24]:
-                row.operator('object.fk_arm_hide', text = "FK arm", icon = "HIDE_OFF")
-            else:
-                row.operator('object.fk_arm_hide', text = "FK arm", icon = "HIDE_ON")
+            if bpy.context.scene.my_tool.bVisibleFKArms:
+                row.prop(mytool, 'bVisibleFKArms', text = 'FK arm', icon = 'HIDE_OFF')
+                bpy.context.object.data.layers[24] = True
+            if not bpy.context.scene.my_tool.bVisibleFKArms:
+                row.prop(mytool, 'bVisibleFKArms', text = 'FK arm', icon = 'HIDE_ON')
+                bpy.context.object.data.layers[24] = False
+
+        if bpy.context.scene.my_tool.bFingers:
+            row = box.row()
+            if bpy.context.scene.my_tool.bVisibleFingers:
+                row.prop(mytool, 'bVisibleFingers', text = 'Fingers', icon = 'HIDE_OFF')
+                bpy.context.object.data.layers[27] = True
+            if not bpy.context.scene.my_tool.bVisibleFingers:
+                row.prop(mytool, 'bVisibleFingers', text = 'Fingers', icon = 'HIDE_ON')
+                bpy.context.object.data.layers[27] = False
 
         if bpy.context.scene.my_tool.bLegs:
-            row = layout.row()
-            if bpy.context.object.data.layers[9]:
-                row.operator('object.ik_leg_hide', text = "IK leg", icon = "HIDE_OFF")
-            else:
-                row.operator('object.ik_leg_hide', text = "IK leg", icon = "HIDE_ON")
+            row = box.row()
+            if bpy.context.scene.my_tool.bVisibleIKLegs:
+                row.prop(mytool, 'bVisibleIKLegs', text = 'IK legs', icon = 'HIDE_OFF')
+                bpy.context.object.data.layers[9] = True
+            if not bpy.context.scene.my_tool.bVisibleIKLegs:
+                row.prop(mytool, 'bVisibleIKLegs', text = 'Ik legs', icon = 'HIDE_ON')
+                bpy.context.object.data.layers[9] = False
 
-            if bpy.context.object.data.layers[25]:
-                row.operator('object.fk_leg_hide', text = "FK leg", icon = "HIDE_OFF")
-            else:
-                row.operator('object.fk_leg_hide', text = "FK leg", icon = "HIDE_ON")
+            if bpy.context.scene.my_tool.bVisibleFKLegs:
+                row.prop(mytool, 'bVisibleFKLegs', text = 'FK legs', icon = 'HIDE_OFF')
+                bpy.context.object.data.layers[25] = True
+            if not bpy.context.scene.my_tool.bVisibleFKLegs:
+                row.prop(mytool, 'bVisibleFKLegs', text = 'Fk legs', icon = 'HIDE_ON')
+                bpy.context.object.data.layers[25] = False
 
         if bpy.context.scene.my_tool.bFeet:
-            row = layout.row()
-            if bpy.context.object.data.layers[10]:
-                row.operator('object.foot_hide', text = "Foot", icon = "HIDE_OFF")
-            else:
-                row.operator('object.foot_hide', text = "Foot", icon = "HIDE_ON")
+            row = box.row()
+            if bpy.context.scene.my_tool.bVisibleFeet:
+                row.prop(mytool, 'bVisibleFeet', text = 'Feet', icon = 'HIDE_OFF')
+                bpy.context.object.data.layers[10] = True
+            if not bpy.context.scene.my_tool.bVisibleFeet:
+                row.prop(mytool, 'bVisibleFeet', text = 'Feet', icon = 'HIDE_ON')
+                bpy.context.object.data.layers[10] = False
 
-class Rig_PT_Subpanel_switches(Panel):
-    bl_parent_id = "RIG_PT_Panel"
-    bl_label = "Switches"
-    bl_idname = "RIG_PT_Subpanel_switches"
-    bl_space_type = "VIEW_3D"
-    bl_region_type = "UI"
-    bl_category = "Rig"
-    bl_options = {"DEFAULT_CLOSED"}
 
-    def draw(self, context):
-        layout = self.layout
-        mytool = context.scene.my_tool
+        ##################################
+        ##           Switches          ###
+        ##################################
+        if bpy.context.scene.my_tool.bArms or bpy.context.scene.my_tool.bLegs:
+            box = layout.box()
+            row = box.row()
+            row.label(text = 'Switches')
 
-        if bpy.context.scene.my_tool.bArms:
-                row = layout.row()
-                row.prop(mytool, "fSwitchArmsLeft", icon = 'VIEW_PAN')
-                row.prop(mytool, "fSwitchArmsRight", icon = 'VIEW_PAN')
+            if bpy.context.scene.my_tool.bArms:
+                row = box.row()
+                row.prop(mytool, 'fSwitchArmsLeft')
+                row.prop(mytool, 'fSwitchArmsRight')
 
-        if bpy.context.scene.my_tool.bLegs:
-                row = layout.row()
-                row.prop(mytool, "fSwitchLegsLeft")
-                row.prop(mytool, "fSwitchLegsRight")
+            if bpy.context.scene.my_tool.bLegs:
+                row = box.row()
+                row.prop(mytool, 'fSwitchLegsLeft')
+                row.prop(mytool, 'fSwitchLegsRight')
 
 class Rig_PT_Subpanel_finish(Panel):
-    bl_parent_id = "RIG_PT_Panel"
-    bl_label = "Finish"
-    bl_space_type = "VIEW_3D"
-    bl_region_type = "UI"
-    bl_category = "Rig"
-    bl_options = {"DEFAULT_CLOSED"}
+    bl_parent_id = 'RIG_PT_Panel'
+    bl_label = 'Finish'
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'Rig'
+    bl_options = {'DEFAULT_CLOSED'}
 
     def draw(self, context):
         layout = self.layout
-        mytool = context.scene.my_tool
 
-        layout.operator('object.feet_rig', text = "Finish foot rig")
+        layout.operator('object.feet_rig', text = 'Finish foot rig')

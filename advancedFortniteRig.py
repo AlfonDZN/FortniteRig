@@ -18,11 +18,13 @@ class rig(Operator):
             bpy.ops.object.widgets() 
         if bpy.context.scene.my_tool.bArms:
             bpy.ops.object.arm_rig()
+        if bpy.context.scene.my_tool.bFingers:
+            bpy.ops.object.finger_rig()
         if bpy.context.scene.my_tool.bLegs:
             bpy.ops.object.leg_rig()
         if bpy.context.scene.my_tool.bEyes:
             bpy.ops.object.eye_rig()            
         if bpy.context.scene.my_tool.bFeet:
-            bpy.ops.object.feet_bones()  
+            bpy.ops.object.feet_bones()
 
         return {'FINISHED'}
